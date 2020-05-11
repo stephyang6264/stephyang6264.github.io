@@ -22,32 +22,112 @@ function newGame(){
 function computerTakeTurn(){
 	let idName = "";
 	var box1 = document.getElementById(idNames[0]).innerHTML;
+	var box2 = document.getElementById(idNames[1]).innerHTML;
 	var box3 = document.getElementById(idNames[2]).innerHTML;
+	var box4 = document.getElementById(idNames[3]).innerHTML;
 	var box5 = document.getElementById(idNames[4]).innerHTML;
+	var box6 = document.getElementById(idNames[5]).innerHTML;
 	var box7 = document.getElementById(idNames[6]).innerHTML;
+	var box8 = document.getElementById(idNames[7]).innerHTML;
 	var box9 = document.getElementById(idNames[8]).innerHTML;
 	
 	do{
 		let rand = parseInt(Math.random()*9) + 1; //1-9
 		idName = idNames[rand-1];
 	
-		if(box5 == ""){
+		
+		//check horizontally
+		 if((box1 == "X" || box1 == "O") && box1 == box2 && box3 == ""){
+			document.getElementById(idNames[2]).innerHTML = currentPlayer;
+			break;
+		
+		}else if((box3 == "X" || box3 == "O") && box3 == box2 && box1 == ""){
+			document.getElementById(idNames[0]).innerHTML = currentPlayer;
+			break;
+		
+		}else if((box1 == "X" || box1 == "O") && box1 == box3 && box2 == ""){
+			document.getElementById(idNames[1]).innerHTML = currentPlayer;
+			break;
+		
+		}else if((box4 == "X" || box4 == "O") && box4 == box5 && box6 == ""){
+			document.getElementById(idNames[5]).innerHTML = currentPlayer;
+			break;
+		
+		}else if((box5 == "X" || box5 == "O") && box5 == box6 && box4 == ""){
+			document.getElementById(idNames[3]).innerHTML = currentPlayer;
+			break;
+		
+		}else if((box4 == "X" || box4 == "O") && box4 == box6 && box5 == ""){
 			document.getElementById(idNames[4]).innerHTML = currentPlayer;
 			break;
-			
-		}else if(box1 == box5 && box9 == ""){
+		
+		}else if((box7 == "X" || box7 == "O") && box7 == box8 && box9 == ""){
 			document.getElementById(idNames[8]).innerHTML = currentPlayer;
 			break;
 		
-		}else if(box5 == box9 && box1 == ""){
+		}else if((box8 == "X" || box8 == "O") && box8 == box9 && box7 == ""){
+			document.getElementById(idNames[6]).innerHTML = currentPlayer;
+			break;
+		
+		}else if((box7 == "X" || box7 == "O") && box7 == box9 && box8 == ""){
+			document.getElementById(idNames[7]).innerHTML = currentPlayer;
+			break;
+		
+		}//else if
+		
+		//check vertically
+		else if((box1 == "X" || box1 == "O") && box1 == box4 && box7 == ""){
+			document.getElementById(idNames[6]).innerHTML = currentPlayer;
+			break;
+		
+		}else if((box4 == "X" || box4 == "O") && box4 == box7 && box1 == ""){
+			document.getElementById(idNames[0]).innerHTML = currentPlayer;
+			break;
+		
+		}else if((box7 == "X" || box7 == "O") && box7 == box1 && box4 == ""){
+			document.getElementById(idNames[3]).innerHTML = currentPlayer;
+			break;
+		
+		}else if((box2 == "X" || box2== "O") && box2 == box5 && box8 == ""){
+			document.getElementById(idNames[7]).innerHTML = currentPlayer;
+			break;
+		
+		}else if((box5 == "X" || box5 == "O") && box5 == box8 && box2 == ""){
+			document.getElementById(idNames[1]).innerHTML = currentPlayer;
+			break;
+		
+		}else if((box8 == "X" || box8 == "O") && box8 == box2 && box5 == ""){
+			document.getElementById(idNames[4]).innerHTML = currentPlayer;
+			break;
+		
+		}else if((box3 == "X" || box3 == "O") && box3 == box6 && box9 == ""){
+			document.getElementById(idNames[8]).innerHTML = currentPlayer;
+			break;
+		
+		}else if((box6 == "X" || box6 == "O") && box6 == box9 && box3 == ""){
+			document.getElementById(idNames[2]).innerHTML = currentPlayer;
+			break;
+		
+		}else if((box9 == "X" || box9 == "O") && box9 == box3 && box6 == ""){
+			document.getElementById(idNames[5]).innerHTML = currentPlayer;
+			break;
+		
+		}
+		
+		//check diagonally
+		else if((box1 == "X" || box1 == "O") && box1 == box5 && box9 == ""){
+			document.getElementById(idNames[8]).innerHTML = currentPlayer;
+			break;
+		
+		}else if((box5 == "X" || box5 == "O") && box5 == box9 && box1 == ""){
 			document.getElementById(idNames[0]).innerHTML = currentPlayer;
 			break;
 			
-		}else if(box3 == box5 && box7 == ""){
+		}else if((box3 == "X" || box3 == "O") && box3 == box5 && box7 == ""){
 			document.getElementById(idNames[6]).innerHTML = currentPlayer;
 			break;
 			
-		}else if(box5 == box7 && box3 == ""){
+		}else if((box5 == "X" || box5 == "O") && box5 == box7 && box3 == ""){
 			document.getElementById(idNames[2]).innerHTML = currentPlayer;
 			break;
 			
@@ -56,7 +136,7 @@ function computerTakeTurn(){
 			document.getElementById(idName).innerHTML = currentPlayer;
 			break;
 		
-		}//if
+		}//else if
 		
 	}while(true);
 }//computerTakeTurn
