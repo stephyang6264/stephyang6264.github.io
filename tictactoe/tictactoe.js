@@ -1,21 +1,97 @@
 let currentPlayer = "X";
 let gameStatus = ""; // "" - continue, "Tie", "X Wins", "O Wins"
 let numTurns = 0;
+let idNames = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+
+//reset board and all variables
+function newGame(){
+	
+	//reset board
+	for(var i = 0; i < idNames.length; i++){
+		document.getElementById(idNames[i]).innerHTML = "";
+	}//for
+	
+	numTurns = 0;
+	gameStatus = 0;
+	currentPlayer = "X";
+	
+	changeVisibility("controls");
+}//newGame
+
+//randomly choose a free box for computer
+function computerTakeTurn(){
+	let idName = "";
+	var box1 = document.getElementById(idNames[0]).innerHTML;
+	var box3 = document.getElementById(idNames[2]).innerHTML;
+	var box5 = document.getElementById(idNames[4]).innerHTML;
+	var box7 = document.getElementById(idNames[6]).innerHTML;
+	var box9 = document.getElementById(idNames[8]).innerHTML;
+	
+	do{
+		let rand = parseInt(Math.random()*9) + 1; //1-9
+		idName = idNames[rand-1];
+	
+		if(box5 == ""){
+			document.getElementById(idNames[4]).innerHTML = currentPlayer;
+			break;
+			
+		}else if(box1 == box5 && box9 == ""){
+			document.getElementById(idNames[8]).innerHTML = currentPlayer;
+			break;
+		
+		}else if(box5 == box9 && box1 == ""){
+			document.getElementById(idNames[0]).innerHTML = currentPlayer;
+			break;
+			
+		}else if(box3 == box5 && box7 == ""){
+			document.getElementById(idNames[6]).innerHTML = currentPlayer;
+			break;
+			
+		}else if(box5 == box7 && box3 == ""){
+			document.getElementById(idNames[2]).innerHTML = currentPlayer;
+			break;
+			
+		}
+		else if(document.getElementById(idName).innerHTML == ""){
+			document.getElementById(idName).innerHTML = currentPlayer;
+			break;
+		
+		}//if
+		
+	}while(true);
+}//computerTakeTurn
 
 // take player turn
 function playerTakeTurn(e){
 	if(e.innerHTML == ""){
 	e.innerHTML = currentPlayer;
 	checkGameStatus();
+	
+	//game is over
+	if(gameStatus != ""){
+		setTimeout(function() {showLightBox(gameStatus, "Game Over.");}, 500);
+	}//if
+	
+	//if game not over, computer goes
+	if(gameStatus == ""){
+		setTimeout(function() {
+			computerTakeTurn();
+			checkGameStatus();
+			
+			//game is over
+				if(gameStatus != ""){
+					setTimeout(function() {showLightBox(gameStatus, "Game Over.");}, 500);
+				}//if
+			
+		}, 500
+		);
+	}//if
+	
 	}else {
 		showLightBox("This box is already selected.", "Please try another." );
 		return;
 	} //else
 		
-	//game is over
-	if(gameStatus != ""){
-		showLightBox(gameStatus, "Game Over.");
-	}///if
 	
 }//playerTakeTurn
 
@@ -27,16 +103,17 @@ function checkGameStatus(){
 	if(checkWin()){
 		gameStatus = currentPlayer + " wins!";
 		return;
-	}
+	}//if
 	
 	
 	// check for tie
 	if(numTurns == 9){
 			gameStatus = "Tie Game";
-	 }
+	 }//if
 	 
 	 //switch current players
 	 currentPlayer = (currentPlayer == "X" ? "O" : "X");
+	 
 	 
 } // checkGameStatus
 
@@ -122,5 +199,8 @@ function continueGame(){
 	changeVisibility("boundaryMessage");
 	
 	// if the game is over, show controls
+	if(gameStatus != ""){
+		changeVisibility("controls");
+	}//if
 	
-}
+}//continueGame
