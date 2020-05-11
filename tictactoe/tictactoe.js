@@ -123,6 +123,10 @@ function computerTakeTurn(){
 			document.getElementById(idNames[0]).innerHTML = currentPlayer;
 			break;
 			
+		}else if((box1 == "X" || box1 == "O") && box1 == box9 && box5 == ""){
+			document.getElementById(idNames[4]).innerHTML = currentPlayer;
+			break;
+			
 		}else if((box3 == "X" || box3 == "O") && box3 == box5 && box7 == ""){
 			document.getElementById(idNames[6]).innerHTML = currentPlayer;
 			break;
@@ -131,8 +135,11 @@ function computerTakeTurn(){
 			document.getElementById(idNames[2]).innerHTML = currentPlayer;
 			break;
 			
-		}
-		else if(document.getElementById(idName).innerHTML == ""){
+		}else if((box3 == "X" || box3 == "O") && box3 == box7 && box5 == ""){
+			document.getElementById(idNames[4]).innerHTML = currentPlayer;
+			break;
+			
+		}else if(document.getElementById(idName).innerHTML == ""){
 			document.getElementById(idName).innerHTML = currentPlayer;
 			break;
 		
