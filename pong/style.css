@@ -1,0 +1,178 @@
+#gameBoard{
+	width:100%;
+	height:90vh;
+	position:relative;
+	border-left:3px solid #ff5f01;
+	border-right:3px solid #ff5f01;
+	border-bottom:3px solid #ff5f01;
+	border-top:thick solid #ff5f01;
+	background-color:black;
+}
+
+#centerline{
+	width:52%;
+	height:100%;
+	border-right:thick dashed white;
+}
+
+body{
+	font-family:Arial, Helvetica, sans-serif;
+	background-color: white;
+	font-weight:bold;
+}
+
+#header{
+	width:100%;
+	height:10vh;
+
+	position:relative;
+}
+
+#header h2{
+	position:absolute;
+	bottom:0px;
+	margin-bottom:3px;
+	color:#fe1c80;
+	font-family:"Lucida Console", Monaco, monospace;
+}
+
+#header #left{
+	left:30px;
+}
+
+#header #right{
+	right:30px;
+}
+
+#title{
+	text-align:center;
+	font-size: 3.2em;
+	color: #ce0000;
+	font-family:"Lucida Console", Monaco, monospace;
+	letter-spacing: 40px;
+}
+
+.paddle{
+	width:10px;
+	height:150px;
+	background-color:white;
+}
+
+#paddle1{
+	position:absolute;
+	left:0px;
+	top:35vh;
+}
+
+#paddle2{
+	position:absolute;
+	right:0px;
+	top:35vh;
+}
+#ball{
+	position:absolute;
+	left:50vw;
+	top:50vh;
+	width:25px;
+	height:25px;
+	background-color:red;
+	border-radius:50%;
+}
+
+#levels{
+	position:absolute;
+	top:10px;
+	left:39px;
+	z-index:1;
+	color:black;
+	font-size:1.5em;
+}
+
+/***** Control Panel****/
+#controlpanel{
+	position:absolute;
+	top:10px;
+	right:10px;
+	z-index:1;
+}
+
+.controls{
+	display:inline-block;
+	padding:6px;
+	margin-right: 10px;
+	width:100px;
+	height:20px;
+	background-color:#ff5f01;
+	color:black;
+	vertical-align:top;
+	text-align:center;
+	line-height:20px;
+	font-size:0.8em;
+	border-radius:7px;
+	
+}
+
+:hover.controls{
+	background-color:#fe1c80;
+}
+
+/**** End Control Panel****/
+
+
+/****Lightbox Code****/
+.hidden {
+	display:none;
+}
+
+.unhidden{
+	display:block;
+}
+
+#lightbox{
+	position:fixed;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:100%;
+	background-color:rgba(0,0,0,0.4);
+	z-index:2;
+	
+}#x{
+	position:absolute;
+	top:10px;
+	right:10px;
+	width:30px;
+	height:30px;
+	z-index:3;
+
+}
+
+#positionMessage{
+	position:absolute;
+	top:45px;
+	left:0px;
+	width:100%;
+	z-index:3;
+}
+
+#boundaryMessage{
+	position:relative;
+	margin-left:auto;
+	margin-right:auto;
+	width:600px;
+	height:200px;
+	background-color:rgba(255,255,255,0.9);
+	z-index:3;
+	padding:30px;
+	border:10px solid #ce0000;
+}
+/**** End Lightbox****/
+
+#message{
+	font-family:Verdana, Geneva, sans-serif;
+}
+
+#message2{
+	font-family:"Lucida Console", Monaco, monospace;
+	font-weight:normal;
+}
