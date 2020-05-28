@@ -140,15 +140,15 @@ function show(){
 	}//if
 	
 	//stop paddle from leaving botton of gameboard
-	if(positionOfPaddle1 >= gameboardHeight - paddleHeight) {
-		positionOfPaddle1 = gameboardHeight - paddleHeight;
+	if(positionOfPaddle1 >= gameboardHeight - paddleHeight -9) {
+		positionOfPaddle1 = gameboardHeight - paddleHeight -9;
 	}//if
-	if(positionOfPaddle2 >= gameboardHeight - paddleHeight) {
-		positionOfPaddle2 = gameboardHeight - paddleHeight;
+	if(positionOfPaddle2 >= gameboardHeight - paddleHeight - 9) {
+		positionOfPaddle2 = gameboardHeight - paddleHeight - 9;
 	}//if
 	
 	//if ball hits top, or bottom, or gameboard, change direction
-	if(topPositionOfBall <= 0 || topPositionOfBall >= gameboardHeight - ballHeight - 10){
+	if(topPositionOfBall <= 0 || topPositionOfBall >= gameboardHeight - ballHeight - 9){
 		topSpeedOfBall *= -1;
 	}//if
 	
