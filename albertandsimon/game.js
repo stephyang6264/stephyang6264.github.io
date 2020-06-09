@@ -3,8 +3,8 @@ const levels = [
 	["flag", "rock", "", "", "",
 	 "fenceside", "rock", "", "", "rider",
 	 "", "tree", "animate", "animate", "animate",
-	 "", "water", "", "horseup", "",
-	 "", "fence", "", "", ""],
+	 "", "water", "", "", "",
+	 "", "fence", "", "horseup", ""],
 	
 	// level 1
 	["flag", "water", "", "", "",
