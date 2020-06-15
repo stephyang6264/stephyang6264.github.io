@@ -4,7 +4,7 @@ const levels = [
 	 "fenceside", "rock", "", "", "rider",
 	 "", "tree", "animate", "animate", "animate",
 	 "", "water", "", "", "",
-	 "", "fence", "", "horseup", ""],
+	 "", "fenceup", "", "horseup", ""],
 	
 	// level 1
 	["flag", "water", "", "", "",
@@ -17,8 +17,15 @@ const levels = [
 	 ["tree", "tree", "flag", "tree", "tree",
 	  "animate", "animate", "animate", "animate", "animate",
 	  "water", "bridge", "water", "water", "water",
-	  "", "", "", "fence", "",
-	  "rider", "rock", "", "", "horseup"]
+	  "", "", "", "fenceup", "",
+	  "rider", "rock", "", "", "horseup"],
+	  
+	  // level 3
+	  ["tree", "flag", "tree", "", "rider",
+	  "", "fenceside", "", "", "",
+	  "", "", "", "", "",
+	  "animate", "animate", "animate", "water", "water",
+	  "rock", "", "", "", "horseup"]
 	]; // end of levels
 
 
@@ -31,6 +38,13 @@ var currentLocationOfHorse = 0;
 var currentAnimation; // allows 1 animation per level
 var widthOfBoard = 5;
 
+var lives = 3;
+
+var gameStatus = false;
+
+showLightBox("Welcome to Albert and Simon's adventure", 
+"Use the up/down and left/right arrow keys to help Albert and Simon navigate a tricky obsatcle course and arrive at the flag. You will have three lives which will be deducted every time you hit an enemy horse so WATCH OUT!");
+
 // start game
 window.addEventListener("load", function () {
 	loadLevel();
@@ -42,22 +56,23 @@ document.addEventListener("keydown", function (e) {
 	switch (e.keyCode) {
 		case 37: // left arrow
 		  if (currentLocationOfHorse % widthOfBoard !== 0) {
-			  tryToMove("left");
+			  if(gameStatus){tryToMove("left");}
+			  
 		  }		
 		  break;
 		case 38: // up arrow
 		  if (currentLocationOfHorse - widthOfBoard >= 0) {
-			  tryToMove("up");
+			  if(gameStatus){tryToMove("up");}
 		  }
 		  break;
 		case 39: //right arrow
 		  if (currentLocationOfHorse % widthOfBoard < widthOfBoard - 1){
-			  tryToMove("right");
+			  if(gameStatus){tryToMove("right");}
 		  }
 		  break;
 		case 40: // down arrow
 		  if (currentLocationOfHorse + widthOfBoard < widthOfBoard * widthOfBoard) {
-			  tryToMove("down");
+			  if(gameStatus){tryToMove("down");}
 		  }
 		  break;
 	} // switch
@@ -80,6 +95,9 @@ function tryToMove(direction) {
 	
 	let newClass = ""; // new class to switch to if move successful
 	
+	let message3 = "You lose";
+	let message4 = "Oh no, you ran into a enemy horse. Click restart game to play again.";
+	
 	
 	switch (direction) {
 		case "left":
@@ -97,13 +115,25 @@ function tryToMove(direction) {
 		  
 	} //switch
 	
+	
 	nextClass = gridBoxes[nextLocation].className;
+	
 	
 	// if the obsatcle is not passable, don't move
 	if (noPassObstacles.includes(nextClass)) { return; }
 	
 	// if it's a fence, and there is no rider, don't move
 	if (!riderOn && nextClass.includes("fence")) { return; }
+	
+	// can't jump from bottom of fence
+	if (riderOn && nextClass.includes("fenceup") && (direction == "up" || direction == "down")){
+		return;
+	}
+	
+	// can't jump from side of fence
+	if (riderOn && nextClass.includes("fenceside") && (direction == "left" || direction == "right")){
+		return;
+	}
 	
 	// if there is a fence, move two spaces with animation
 	if (nextClass.includes("fence")) {
@@ -112,6 +142,8 @@ function tryToMove(direction) {
 		if (riderOn){
 			gridBoxes[currentLocationOfHorse].className = "";
 			oldClassName = gridBoxes[nextLocation].className;
+			
+			
 			
 			// set values according to direction
 			if (direction == "left"){
@@ -132,6 +164,8 @@ function tryToMove(direction) {
 				nextLocation2 = nextLocation + widthOfBoard;
 			}
 			
+			
+			
 			//show horse jumping
 			gridBoxes[nextLocation].className = nextClass;
 			
@@ -149,7 +183,7 @@ function tryToMove(direction) {
 				//show horse and rider after landing
 				gridBoxes[currentLocationOfHorse].className = nextClass2;
 				
-				// if next box id a flag, go up a level
+				// if next box is a flag, go up a level
 				levelUp(nextClass);
 			}, 350);
 			return;
@@ -157,6 +191,8 @@ function tryToMove(direction) {
 		} // if riderOn
 		
 	} // if class has a fence
+	
+	
 	
 	// if there is a rider, add rider
 	if (nextClass == "rider") {
@@ -184,7 +220,11 @@ function tryToMove(direction) {
 	
 	// if it is an enemy
 	if (nextClass.includes("enemy")) {
-		document.getElementById("lose").style.display = "block";
+		lives--;
+		showLives();
+		//clearTimeout(currentAnimation); // cancels current animation
+		//showLightBox2(message3, message4);
+		//document.getElementById("lose").style.display = "block";
 		return;
 	}
 	
@@ -195,15 +235,29 @@ function tryToMove(direction) {
 
 // move up a level
 function levelUp(nextClass){
+	let message3 = "Congradulaions!";
+	let message4 = "You successfully completed all the levels!";
+	
 	if (nextClass == "flag" && riderOn){
-		document.getElementById("levelup").style.display = "block";
-		clearTimeout(currentAnimation); // cancels current animation
-		setTimeout (function(){
-		  document.getElementById("levelup").style.display = "none";
-		  currentLevel++;
-		  loadLevel();
+		currentLevel++;
+		lives = 3;
+		showLives();
+	    clearTimeout(currentAnimation); // cancels current animation
+		
+		// ends game if final level was reached
+		if(currentLevel == 4){
+			showLightBox2(message3, message4);
+			
+		 // document.getElementById("endgame").style.display = "block";
 		  
-		  // add if statement to stop getting levels once last one is reached**********************************
+		  return;  
+		}
+		
+		document.getElementById("levelup").style.display = "block";
+		setTimeout (function(){
+		  
+		 document.getElementById("levelup").style.display = "none";
+		  loadLevel();
 		},1000);
 	}
 }
@@ -215,7 +269,7 @@ function loadLevel(){
 	riderOn = false;
 	
 	// load board
-	for(i = 0; i < gridBoxes.length; i++) {
+	for (i = 0; i < gridBoxes.length; i++) {
 	  gridBoxes[i].className = levelMap[i];
 	  if(levelMap[i].includes("horse")) currentLocationOfHorse = i;
 	} // for
@@ -232,6 +286,10 @@ function loadLevel(){
 // direction - current direction of animation
 function animateEnemy(boxes, index, direction) {
 	
+	let enemyRun = boxes[index].className;
+	//let message3 = "You Lose";
+	//let message4 = "Oh no, you were hit by an enemy horse. Click restart game to play again.";
+	
 	// exit function if no animation
 	if (boxes.length <= 0) { return; }
 	
@@ -241,6 +299,7 @@ function animateEnemy(boxes, index, direction) {
 	} else {
 	  boxes[index].classList.add("enemyleft");
 	}
+	
 	
 	//remove images from other boxes
 	for (i = 0; i < boxes.length; i++){
@@ -252,6 +311,7 @@ function animateEnemy(boxes, index, direction) {
 	
 	//moving right
 	if(direction == "right"){
+		
 		// turn around if hit right side
 		if(index == boxes.length - 1 ){
 		  index--;
@@ -262,6 +322,7 @@ function animateEnemy(boxes, index, direction) {
 		
 	// moving left
 	} else {
+		
 	  // turn around if hit left side
 	  if (index == 0){
 		index++;
@@ -270,11 +331,125 @@ function animateEnemy(boxes, index, direction) {
 	  index--;
 	  }
 	} // else
+		
+	// end game if enemy runs into horse
+	if (enemyRun.includes("horse")){
+		lives--;
+		showLives();
+		//showLightBox2(message3, message4);
+		//gameStatus = false;
+		//document.getElementById("lose").style.display = "block";
+		return;
+	}
 	
 	currentAnimation = setTimeout(function() {
 		animateEnemy(boxes, index, direction);
 	  }, 750);
 } // animateEnemy
+
+/****Lightbox Code****/
+
+// change the visibility of a divID
+function changeVisibility (divID){
+	var element = document.getElementById(divID);
+	
+	// if element exists, switch it's class between hidden and unhidden
+	if(element){
+		element.className = (element.className == 'hidden')? 'unhidden' : 'hidden';
+	}//if
+}//changeVisibility
+
+//display message in lightbox
+function showLightBox(message, message2){
+	//set messages
+	document.getElementById("message").innerHTML = message;
+	document.getElementById("message2").innerHTML = message2;
+	
+	//show lightbox
+	changeVisibility("lightbox");
+	changeVisibility("boundaryMessage");
+}//showLightBox
+
+//display message in lightbox
+function showLightBox2(message3, message4){
+	//set messages
+	document.getElementById("message3").innerHTML = message3;
+	document.getElementById("message4").innerHTML = message4;
+	
+	//show lightbox
+	changeVisibility("lightbox2");
+	changeVisibility("boundaryMessage2");
+}//showLightBox2
+
+//close light box
+function continueGame(){
+	changeVisibility("lightbox2");
+	changeVisibility("boundaryMessage2");
+	
+}//continueGame
+
+/****End of Lightbox Code****/
+
+function startGame(){
+	changeVisibility("lightbox");
+	changeVisibility("boundaryMessage");
+	gameStatus = true;
+} // startGame
+
+function restartGame(){
+	
+	changeVisibility("lightbox2");
+	changeVisibility("boundaryMessage2");
+	gameStatus = true;
+	currentLevel = 0;
+	lives = 3;
+	showLives();
+	loadLevel();
+	
+} // restartGame
+
+function showLives(){
+	if(lives == 3){
+		document.getElementById("lives").innerHTML = "&hearts;&nbsp;&hearts;&nbsp;&hearts;&nbsp;";
+	}else if(lives == 2){
+		document.getElementById("lives").innerHTML = "&hearts;&nbsp;&hearts;&nbsp;";
+		clearTimeout(currentAnimation); // cancels current animation
+		loadLevel();
+	}else if(lives == 1){
+		document.getElementById("lives").innerHTML = "&hearts;&nbsp;";
+		clearTimeout(currentAnimation); // cancels current animation
+		loadLevel();
+	}else{
+		document.getElementById("lives").innerHTML = "";
+		showLightBox2("You Lose", "Click restart to play again.");
+		clearTimeout(currentAnimation); // cancels current animation
+		gameStatus = false;
+	}
+} // showLives
+
+function replayGame(){
+	gameStatus = true;
+	currentLevel = 0;
+	clearTimeout(currentAnimation); // cancels current animation
+	lives = 3;
+	showLives();
+	loadLevel();
+	
+}//restartGame
+
+function replayLevel(){
+	gameStatus = true;
+	clearTimeout(currentAnimation); // cancels current animation
+	lives = 3;
+	showLives();
+	loadLevel();
+}
+
+function pauseGame(){
+	clearTimeout(currentAnimation); // cancels current animation
+	gameStatus = false;
+}//pauseGame
+
 
 
 
