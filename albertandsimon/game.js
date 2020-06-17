@@ -1,30 +1,30 @@
 const levels = [
 	// level 0
-	["flag", "rock", "", "", "",
-	 "fenceside", "rock", "", "", "rider",
-	 "", "tree", "animate", "animate", "animate",
-	 "", "water", "", "", "",
-	 "", "fenceup", "", "horseup", ""],
+	["flag", "fenceup", "", "", "rider",
+	 "tree", "tree", "animate", "animate", "animate",
+	 "", "", "", "", "",
+	 "water", "water", "bridge", "water", "water",
+	 "", "horseup", "", "", ""],
 	
 	// level 1
-	["flag", "water", "", "", "",
-	 "fenceside", "water", "", "", "rider",
-	 "animate", "bridge animate", "animate", "animate", "animate",
-	 "", "water", "", "", "",
-	 "", "water", "horseup", "", ""],
+	["horsedown", "tree", "", "", "",
+	 "", "", "", "tree", "",
+	 "fenceside", "fenceside", "fenceside", "", "",
+	 "animate", "animate", "animate", "tree", "",
+	 "rock", "flag", "rock", "", "rider"],
 	 
 	 // level 2
-	 ["tree", "tree", "flag", "tree", "tree",
-	  "animate", "animate", "animate", "animate", "animate",
-	  "water", "bridge", "water", "water", "water",
-	  "", "", "", "fenceup", "",
-	  "rider", "rock", "", "", "horseup"],
+	 ["rider", "", "", "water", "flag",
+	  "", "tree", "", "water", "fenceside",
+	  "", "", "", "water", "",
+	  "tree", "animate", "animate", "bridge animate", "animate",
+	  "", "", "", "water", "horseup"],
 	  
 	  // level 3
 	  ["tree", "flag", "tree", "", "rider",
 	  "", "fenceside", "", "", "",
-	  "", "", "", "", "",
 	  "animate", "animate", "animate", "water", "water",
+	  "", "", "", "tree", "",
 	  "rock", "", "", "", "horseup"]
 	]; // end of levels
 
@@ -42,8 +42,12 @@ var lives = 3;
 
 var gameStatus = false;
 
-showLightBox("Welcome to Albert and Simon's adventure", 
-"Use the up/down and left/right arrow keys to help Albert and Simon navigate a tricky obsatcle course and arrive at the flag. You will have three lives which will be deducted every time you hit an enemy horse so WATCH OUT!");
+var currentLocationOfEnemy = 0;
+var currentDirectionOfEnemy = "right";
+var animationLocations;
+
+showLightBox("Welcome to Albert and Simon's adventure: Escape the Maze", 
+"Help Albert and his trusty horse Simon escape the different levels of a tricky maze filled with obstables and enemies. Use the up/down and left/right arrow keys to help Albert and Simon navigate the course and arrive at the flag to preceed to the next stage of the forest maze. You will have three lives which will be deducted every time you hit an enemy horse so WATCH OUT!");
 
 // start game
 window.addEventListener("load", function () {
@@ -235,8 +239,8 @@ function tryToMove(direction) {
 
 // move up a level
 function levelUp(nextClass){
-	let message3 = "Congradulaions!";
-	let message4 = "You successfully completed all the levels!";
+	let message3 = "Congradulations!";
+	let message4 = "You successfully completed all the levels and escaped the maze!";
 	
 	if (nextClass == "flag" && riderOn){
 		currentLevel++;
@@ -248,8 +252,6 @@ function levelUp(nextClass){
 		if(currentLevel == 4){
 			showLightBox2(message3, message4);
 			
-		 // document.getElementById("endgame").style.display = "block";
-		  
 		  return;  
 		}
 		
@@ -274,7 +276,11 @@ function loadLevel(){
 	  if(levelMap[i].includes("horse")) currentLocationOfHorse = i;
 	} // for
 	
+	
+	
 	animateBoxes = document.querySelectorAll(".animate");
+	
+	animationLocations = animateBoxes;
 	
 	animateEnemy(animateBoxes, 0 , "right");
 	
@@ -287,8 +293,12 @@ function loadLevel(){
 function animateEnemy(boxes, index, direction) {
 	
 	let enemyRun = boxes[index].className;
-	//let message3 = "You Lose";
-	//let message4 = "Oh no, you were hit by an enemy horse. Click restart game to play again.";
+	let animateBoxes;
+	
+	
+	currentLocationOfEnemy = index;
+	
+	currentDirectionOfEnemy = direction;
 	
 	// exit function if no animation
 	if (boxes.length <= 0) { return; }
@@ -336,11 +346,11 @@ function animateEnemy(boxes, index, direction) {
 	if (enemyRun.includes("horse")){
 		lives--;
 		showLives();
-		//showLightBox2(message3, message4);
-		//gameStatus = false;
-		//document.getElementById("lose").style.display = "block";
+		
 		return;
 	}
+	
+	animateBoxes = document.querySelectorAll(".animate");
 	
 	currentAnimation = setTimeout(function() {
 		animateEnemy(boxes, index, direction);
@@ -448,7 +458,20 @@ function replayLevel(){
 function pauseGame(){
 	clearTimeout(currentAnimation); // cancels current animation
 	gameStatus = false;
+	
+	
 }//pauseGame
+
+function resumeGame(){
+	gameStatus = true;
+	let animateBoxes;
+	
+	clearTimeout(currentAnimation); // cancels current animation
+	
+	animateBoxes = document.querySelectorAll(".animate");
+	
+	animateEnemy(animationLocations, currentLocationOfEnemy , currentDirectionOfEnemy);
+}
 
 
 
